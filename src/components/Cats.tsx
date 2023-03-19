@@ -1,49 +1,30 @@
-import { FC, useEffect, useState } from "react";
-import { Cat, Cates } from "../constants/types";
+import { FC, lazy, Suspense, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState } from "../constants/types";
+import { clearCats, setPage } from "../store/actions";
 
-const Cats: FC<{categoryId: string, categoryName: string}> = ({categoryId, categoryName}) => {
-  const [cats, setCats] = useState<Cates>([]);
-  const fetchCats = () => {
-    return fetch(
-      `https://api.thecatapi.com/v1/images/search?limit=10&page=1&category_ids=${categoryId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "text/plain",
-        },
-      }
-    )
-  };
+const CatItem = lazy(() => import("./CatItem"));
+
+const Cats: FC<{categoryId: number, categoryName: string}> = ({categoryId, categoryName}) => {
+  const page = useSelector((state: AppState)  => state.page);
+  const category = useSelector((state: AppState)  => state.category);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchCats().then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      setCats(data);
-    });;
-  }, [categoryId]);
-
+    dispatch(clearCats());
+  }, [category]);
 
   const onHandleClick = () => {
-    fetchCats().then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      setCats((prevCats) => [...prevCats, ...data]);
-    });;
+    dispatch(setPage(page + 1));
   };
 
   return (
     <span className="cats-container">
-      <h1>{categoryName}</h1>
-      <article className="cats">
-        {cats.map((cat: Cat) => (
-          <img key={cat.id} src={cat.url} alt="error" />
-        ))}
-      </article>
+      <Suspense fallback={<div>Loading</div>}>
+				<CatItem />
+			</Suspense>
       {
-        +categoryId ? <button type="submit" onClick={onHandleClick} className='load-more'>
+        categoryId ? <button type="submit" onClick={onHandleClick} className='load-more'>
           Load More Cats
         </button> : null
       }

@@ -1,20 +1,27 @@
 body {
   position: absolute;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
+.home {
+  display: flex;
+  font-size: large;
+  align-items: center;
+  justify-content: center;
+}
+
 .category-container {
-  background-color: rgb(210, 214, 214);
+  background-color: rgb(164, 167, 167);
   border-radius: 9px;
   width: 100vw;
   display: flex;
@@ -26,7 +33,20 @@ code {
   margin: 20px;
   padding: 20px;
   text-align: center;
+  transition: all .2s ease-in-out;
+}
+
+.category-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: white;
   text-transform: capitalize;
+  font-size: 16px;
+}
+
+.category:hover {
+  transform: scale(1.5);
 }
 
 .cats {
@@ -36,6 +56,9 @@ code {
   padding: 5px;
   justify-content: center;
   margin-top: 20px;
+  box-shadow: 2px 3px rgba(14, 14, 15, 0.648);
+  background-color: rgb(164, 167, 167);
+  border-radius: 20px;
 }
 
 img {
@@ -46,12 +69,12 @@ img {
 }
 
 .load-more {
-  background-color: #888888;
+  background-color: rgb(164, 167, 167);
   border-radius: 9px;
-  color: white;
   padding: 10px;
-  margin-left: 75%;
-  margin-top: 5px;
+  margin-left: 45%;
+  margin-top: 10px;
+  color: white;
 }
 
 .go-back {
@@ -59,12 +82,8 @@ img {
   margin-left: 5px;
   margin-top: 5px;
   border: none;
+  color: rgb(62, 64, 64);
   text-decoration: underline;
-  color: blue;
-  font-size: 14px;
-}
-
-.main {
-  margin-left: 20px;
-  font-size: 20px;
+  font-size: 16px;
+  text-transform: capitalize;
 }

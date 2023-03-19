@@ -1,20 +1,23 @@
-import { FC, useEffect, useState } from "react";
-import { Categoris, Category } from "../constants/types";
+import { FC, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Route, Routes } from "react-router-dom";
+import { AppState, Category } from "../constants/types";
+import { setAllCategories, setCategory } from "../store/actions";
 import Cats from "./Cats";
+import Home from "./Home";
 
 const Categories: FC = () => {
-  const [activeCategory, setActiveCategory] = useState<Category>({
-    id: 0,
-    name: 'Choose Category',
-  });
-  const [categories, setCategories] = useState<Categoris>([]);
+  const categories = useSelector((state: AppState) => state.allCategories);
+  const category = useSelector((state: AppState) => state.category);
+  const dispatch = useDispatch();
+
   const fetchCategories = () => {
     fetch("https://api.thecatapi.com/v1/categories")
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        setCategories(data);
+        dispatch(setAllCategories(data));
       });
   };
 
@@ -22,16 +25,35 @@ const Categories: FC = () => {
     fetchCategories();
   }, []);
 
+  const onHandleCategoriesClick = (category: Category) => {
+    dispatch(setCategory(category));
+  };
+
   return (
     <>
       <div className="category-container">
         {categories?.map((category) => (
           <div key={category.id} className="category">
-            <button onClick={() => setActiveCategory(category)}>{category.name}</button>
+            <Link to={`/${category.name}`}>
+              <button
+                onClick={() => onHandleCategoriesClick(category)}
+                className="category-button"
+              >
+                {category.name}
+              </button>
+            </Link>
           </div>
         ))}
       </div>
-      <Cats categoryId={activeCategory.id.toString()} categoryName={activeCategory.name} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path={`/${category.name}`}
+          element={
+            <Cats categoryId={category.id} categoryName={category.name} />
+          }
+        />
+      </Routes>
     </>
   );
 };
